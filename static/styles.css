@@ -1,0 +1,394 @@
+/* Fullscreen background image */
+.background-image {
+    background-color: #eae8e8;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Gradient animation */
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Container styling */
+.container {
+    background-color: rgba(252, 252, 252, 0.655); /* More opaque for better readability */
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    transition: all 0.3s ease;
+}
+.glass-container {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+
+.container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(10, 10, 10, 2);
+}
+
+/* Menu styling */
+/* Hamburger menu container */
+.menu-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+/* Wrapper for menu icon and text */
+.menu-icon-and-text {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+/* Styling for "MENU" text */
+.menu-text {
+    color: rgb(7, 7, 7);
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0  rgba(0, 0, 0, 0.5);
+}
+
+/* Hamburger icon */
+.menu-icon {
+    color: rgb(7, 7, 7);
+    width: 30px;
+    height: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    cursor: pointer;
+}
+
+.menu-icon span {
+    display: block;
+    width: 100%;
+    height: 4px;
+    background-color: rgb(15, 14, 14);
+    border-radius: 2px;
+    transition: background-color 0.3s ease;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: rgba(66, 60, 60, 0.8);
+    display: none;
+    flex-direction: column;
+    box-shadow: 0 4px 6px rgba(69, 66, 66, 0.767);
+    border-radius: 5px;
+}
+
+.dropdown-menu.show {
+    display: flex;
+}
+
+.dropdown-menu a {
+    text-decoration: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+.dropdown-menu a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Image upload section */
+.image-upload {
+    margin-bottom: 20px;
+}
+
+.image-preview {
+    width: 100%;
+    height: 300px;
+    border: 2px dashed #150d0d;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f8f8;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 4px 10px rgba(43, 42, 42, 0.1);
+}
+
+.image-preview:hover {
+    background-color: #ffffff;
+    border-color: #78081b8a;
+}
+
+.image-preview img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+}
+
+/* Classify button styling */
+.three-d-button {
+    background: linear-gradient(145deg, #e3dddddb, #ffffff);
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2), -5px -5px 10px rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 15px 30px;
+    transition: all 0.2s ease-in-out;
+}
+.three-d-button:hover {
+    transform: scale(1.1) translateY(-5px);
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2), -10px -10px 20px rgba(255, 255, 255, 0.8);
+}
+
+.classify-button {
+    background-color: #616cd2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+
+.classify-button:hover {
+    background-color: #4e74c5;
+    transform: scale(1.05);
+}
+
+.classify-button:active {
+    background-color: #1f6395;
+    transform: translateY(0);
+}
+
+/* Spinner animation */
+.spinner {
+    border: 4px solid rgba(115, 129, 208, 0.818);
+    border-top: 4px solid #5e62cd;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 10s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Result display styling */
+.result {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+.result.normal {
+    background-color: #d4edda; /* Light green */
+    color: #155724; /* Dark green text */
+}
+
+.result.abnormal {
+    background-color: #f8d7da; /* Light red */
+    color: #721c24; /* Dark red text */
+}
+
+
+
+/* Overlay button styling for welcome page */
+.ct-kidney-button {
+    background-color: #de1616;
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    border-radius: 12px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.ct-kidney-button:hover {
+    background-color: #e21b14;
+    box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.4);
+    transform: translateY(-5px);
+}
+
+.ct-kidney-button:active {
+    background-color: #e41515;
+    transform: translateY(0);
+}
+
+/* Glassmorphism Design */
+.glass-button {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: black;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.glass-button:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.05);
+}
+
+/* Neon Glow Design */
+.neon-text {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 0 5px #ff66c4, 0 0 10px #ff66c4, 0 0 20px #ff66c4, 0 0 40px #ff66c4;
+}
+
+.neon-button {
+    background: none;
+    color: #ff66c4;
+    border: 2px solid #ff66c4;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+.neon-button:hover {
+    color: rgb(88, 42, 42);
+    background: #ff66c4;
+    box-shadow: 0 0 10px #ff66c4, 0 0 20px #ff66c4, 0 0 40px #ff66c4;
+}
+
+/* Gradient Buttons */
+.gradient-button {
+    background: linear-gradient(45deg, #ff6f61, #de6fff);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.gradient-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Animated Dropdown Menu */
+.dropdown-menu {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 10px;
+    width: 150px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    transition: all 0.3s ease-in-out;
+}
+
+.dropdown-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-menu a {
+    display: block;
+    color: black;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f0f0f0;
+}
+
+/* Loader Animation */
+.menu-loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.menu-loader div {
+    width: 20px;
+    height: 4px;
+    background: white;
+    margin: 4px;
+    animation: loaderAnimation 0.6s infinite ease-in-out;
+}
+
+.menu-loader div:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.menu-loader div:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes loaderAnimation {
+    0%, 100% {
+        transform: scaleY(1);
+    }
+    50% {
+        transform: scaleY(2);
+    }
+}
+
+/* Card Layout */
+.result-card {
+    background: white;
+    color: black;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.result-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}

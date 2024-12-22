@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Classification</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="background-image">
+    <!-- Top-right menu -->
+    <div class="menu-container">
+        <div class="menu-icon-and-text" onclick="toggleMenu()">
+            <span class="menu-text">MENU</span>
+            <div class="menu-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <div id="dropdownMenu" class="dropdown-menu">
+            <a href="{{ url_for('upload', model_type='scratch') }}">Our Model</a>
+            <a href="{{ url_for('upload', model_type='vgg') }}">VGG16</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Alert Box -->
+        <div class="alert alert-primary" role="alert">
+            <a href="https://www.kaggle.com/code/esraataha085/classification-for-kidney" class="alert-link" target="_blank">my notebook</a>. 
+            Give it a click if you like.
+        </div>
+
+        <div class="image-upload">
+            <input type="file" id="fileInput" accept="image/*" onchange="previewImage(event)" style="display:none;">
+            <div id="imagePreview" class="image-preview" onclick="triggerFileInput()">
+                <p>Click to classify image</p>
+            </div>
+        </div>
+
+        <button id="classifyButton" class="classify-button" onclick="classifyImageButton()" style="display:none;">Check for disease</button>
+        
+        <!-- New Spinner Buttons -->
+        <div id="spinner" style="display: none;">
+            <button class="btn btn-primary" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                <span role="status">Loading...</span>
+            </button>
+        </div>
+        
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        const modelType = "{{ model_type }}";  // Model type passed from Flask
+
+        function triggerFileInput() {
+            document.getElementById('fileInput').click();
+        }
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function() {
+                const preview = document.getElementById('imagePreview');
+                const img = document.createElement('img');
+                img.src = reader.result;
+                img.style.width = '100%';
+                img.style.height = '100%';
+                preview.innerHTML = '';
+                preview.appendChild(img);
+                document.getElementById('classifyButton').style.display = "inline-block";
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function classifyImageButton() {
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) {
+                alert("Please select an image first.");
+                return;
+            }
+
+            const spinner = document.getElementById('spinner');
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = "";
+            spinner.style.display = "block";
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch(`/predict/${modelType}`, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                resultDiv.textContent = "Prediction: " + data.prediction;
+
+                // Clear previous classes
+                resultDiv.classList.remove('normal', 'abnormal');
+
+                // Add class based on prediction
+                if (data.prediction.includes("abnormal")) {
+                    resultDiv.classList.add('abnormal'); // Red box
+                } else if (data.prediction.includes("normal")) {
+                    resultDiv.classList.add('normal'); // Green box
+                }
+
+                spinner.style.display = "none";
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                spinner.style.display = "none";
+            });
+        }
+
+        function toggleMenu() {
+            const dropdown = document.getElementById("dropdownMenu");
+            dropdown.classList.toggle("show");
+        }
+    </script>
+</body>
+</html>
