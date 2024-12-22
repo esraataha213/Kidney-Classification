@@ -1,36 +1,81 @@
-# CT Kidney Project
+# CT Kidney Disease Classification
 
-## Overview
+Welcome to the CT Kidney Disease Classification project! This repository focuses on detecting and classifying abnormalities in CT kidney images. Two different approaches are used: models trained from scratch and VGG16 pretrained models. Both pipelines are designed to predict whether a kidney is normal or abnormal and, if abnormal, classify the type of abnormality.
 
-The CT Kidney Project aims to leverage deep learning techniques to analyze CT images of kidneys for medical insights. This project focuses on utilizing convolutional neural networks (CNNs) for image processing and classification tasks. The ultimate goal is to support healthcare professionals with accurate and efficient kidney condition analysis.
+## Dataset Overview
+Our dataset contains 12,446 unique samples distributed as follows:
 
-## Features
-- Data Preprocessing: Includes normalization of CT scan images for better model generalization.
-- Deep Learning Architecture: Utilizes CNN layers, including Conv2D, MaxPooling2D, Flatten, Dense, and Dropout.
-- Prediction Pipelines: Implements both scratch and VGG16-based models for binary and multiclass classification.
-- Medical Focus: Specifically designed to assist in analyzing kidney-related conditions.
-- Deployment Ready: The model can be integrated into healthcare applications via APIs.
+- *Normal*: 5,077 images
+- *Cyst*: 3,709 images
+- *Stone*: 1,377 images
+- *Tumor*: 2,283 images
 
-## Dataset
+## Models
 
-The project uses a dataset of CT kidney images, preprocessed for consistency and improved training performance. The dataset includes:
+### Scratch Models
+- *Binary Model*: Classifies images as Normal or Abnormal.
+- *Multiclass Model*: Classifies Abnormal images into one of the three classes: Cyst, Stone, or Tumor.
 
-- Total Data: 12,446 unique images.
-- Normal: 5,077 images.
-- Cyst: 3,709 images.
-- Stone: 1,377 images.
-- Tumor: 2,283 images.
+### VGG16 Pretrained Models
+- *VGG Binary Model*: Fine-tuned binary classifier using VGG16.
+- *VGG Multiclass Model*: Fine-tuned multiclass classifier using VGG16.
 
- ## Model Architecture
+## Prediction Pipelines
 
-The project employs two types of deep learning architectures:
+### Scratch Model Prediction
+python
+binary_model = tf.keras.models.load_model('binary_model_final.h5')
+multiclass_model = tf.keras.models.load_model('multiclass_model_final.h5')
 
-1- Scratch Models:
+def predict_pipeline(image_path, binary_model, multiclass_model):
+    img = tf.keras.preprocessing.image.load_img(image_path, target_size=(224, 224))
+    img_array = tf.keras.preprocessing.image.img_to_array(img) / 255.0
+    img_array = np.expand_dims(img_array, axis=0)
 
-- Binary classification model for distinguishing between normal and abnormal conditions.
-- Multiclass classification model for categorizing abnormal conditions into 'Cyst', 'Stone', or 'Tumor'.
+    binary_pred = binary_model.predict(img_array)
+    if binary_pred > 0.5:
+        multiclass_pred = multiclass_model.predict(img_array)
+        class_idx = np.argmax(multiclass_pred)
+        class_labels = {0: 'Cyst', 1: 'Stone', 2: 'Tumor'}
+        return f"Abnormal: {class_labels[class_idx]}"
+    else:
+        return "Normal"
 
-2- VGG16 Pretrained Models:
 
-- Binary classification model using transfer learning with VGG16.
-- Multiclass classification model using transfer learning with VGG16.
+### VGG16 Model Prediction
+python
+VGG_binary_model = tf.keras.models.load_model('VGG_model_binary_final.h5')
+VGG_multiclass_model = tf.keras.models.load_model('VGG_model_multi_final.h5')
+
+def predict_pipeline_vgg(image_path, binary_model, multiclass_model):
+    img = tf.keras.preprocessing.image.load_img(image_path, target_size=(224, 224))
+    img_array = tf.keras.preprocessing.image.img_to_array(img) / 255.0
+    img_array = np.expand_dims(img_array, axis=0)
+
+    binary_pred = binary_model.predict(img_array)
+    if binary_pred > 0.5:
+        multiclass_pred = multiclass_model.predict(img_array)
+        class_idx = np.argmax(multiclass_pred)
+        class_labels = {0: 'Cyst', 1: 'Stone', 2: 'Tumor'}
+        return f"Abnormal: {class_labels[class_idx]}"
+    else:
+        return "Normal"
+
+
+## Usage
+
+1. *Prepare Models:*
+   - Ensure the models (binary_model_final.h5, multiclass_model_final.h5, VGG_model_binary_final.h5, VGG_model_multi_final.h5) are saved in your working directory.
+
+2. *Run Prediction:*
+   - Use the predict_pipeline function for scratch models.
+   - Use the predict_pipeline_vgg function for VGG16 models.
+
+3. *Example:*
+python
+result = predict_pipeline('path_to_image.jpg', binary_model, multiclass_model)
+print(result)
+
+
+## License
+This project is open-source under the MIT License. Feel free to contribute and improve!
